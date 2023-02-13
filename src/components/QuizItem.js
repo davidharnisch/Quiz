@@ -1,5 +1,5 @@
 import React from "react";
-import AnswerButton from "./AnswerButton"
+import AnswerButton from "./StartQuiz"
 
 export default function QuizItem(props) {
 
