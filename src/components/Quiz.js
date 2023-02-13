@@ -1,11 +1,13 @@
 import '../style/Style.css';
 import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
+import axios from "axios";
 import QuizResult from "./QuizResults";
 
 export default function Quiz(props) {
     const [quiz, setQuiz] = useState([]);
     const [scores, setScores] = useState(undefined);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         function decodeHtml(html) {
@@ -26,7 +28,8 @@ export default function Quiz(props) {
                             correctAnswer: decodeHtml(question.correct_answer)
                     };
                 });
-                setQuiz(quizArray);
+                setQuiz(quizArray)
+                setLoading(false);
             });
             
         function createAnswersArray(correctAnswer, incorrectAnswersArr) {
@@ -47,6 +50,12 @@ export default function Quiz(props) {
         }
     }, []);
     //console.log("all quiz" + JSON.stringify(quiz));
+
+    if (isLoading) {
+        return (
+        <div className='loading' >Loading the data</div>
+      );
+      }
 
     function renderQuiz() { 
         return quiz.map((question, key) => {
@@ -124,7 +133,7 @@ export default function Quiz(props) {
         <div className='quiz-container'>
             {renderQuiz()}
             {scores === undefined ? 
-                <button onClick={checkAnswers}>Check answers</button> : 
+                <button onClick={checkAnswers} className='button-base-style quiz-btn'>Check answers</button> : 
                 <QuizResult scores = {scores} newQuizHandler={props.newQuizHandler} />
             }
         </div>
